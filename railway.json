@@ -1,7 +1,0 @@
-{
-  "build": {
-    "docker": {
-      "keycloak": "./keycloak/Dockerfile"
-    }
-  }
-}
