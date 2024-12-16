@@ -12,4 +12,4 @@ ENV DB_PASSWORD=${DB_PASSWORD}
 
 EXPOSE 8080
 
-CMD ["-b", "0.0.0.0"]
+ENTRYPOINT ["java", "-Dkeycloak.profile.feature.upload_scripts=disabled", "-Dkeycloak.profile.feature.realm_imports=enabled", "-Dkeycloak.profile.feature.sessions=enabled", "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled", "-jar", "/opt/keycloak/keycloak.jar", "-b", "0.0.0.0"]
