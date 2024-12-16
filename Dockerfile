@@ -1,4 +1,4 @@
-FROM jboss/keycloak:latest
+FROM quay.io/keycloak/keycloak:latest
 
 ENV KEYCLOAK_USER=${KEYCLOAK_USER}
 ENV KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
