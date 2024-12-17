@@ -1,15 +1,21 @@
+FROM quay.io/keycloak/keycloak:latest as builder
+
+ENV KC_HEALTH_ENABLED=true
+ENV KC_METRICS_ENABLED=true
+
+ENV KC_DB=${KC_DB}
+
+WORKDIR /opt/keycloak
+RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
+RUN /opt/keycloak/bin/kc.sh build
+
 FROM quay.io/keycloak/keycloak:latest
+COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
-ENV KEYCLOAK_USER=${KEYCLOAK_USER}
-ENV KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+ENV KC_DB=${KC_DB}
+ENV KC_DB_URL=${KC_DB_URL}
+ENV KC_DB_USERNAME=${KC_DB_USERNAME}
+ENV KC_DB_PASSWORD=${KC_DB_PASSWORD}
+ENV KC_HOSTNAME=${KC_HOSTNAME}
 
-ENV DB_VENDOR=${DB_VENDOR}
-ENV DB_ADDR=${DB_ADDR}
-ENV DB_PORT=${DB_PORT}
-ENV DB_DATABASE=${DB_DATABASE}
-ENV DB_USER=${DB_USER}
-ENV DB_PASSWORD=${DB_PASSWORD}
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-Dkeycloak.profile.feature.upload_scripts=disabled", "-Dkeycloak.profile.feature.realm_imports=enabled", "-Dkeycloak.profile.feature.sessions=enabled", "-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled", "-jar", "/opt/keycloak/keycloak.jar", "-b", "0.0.0.0"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
