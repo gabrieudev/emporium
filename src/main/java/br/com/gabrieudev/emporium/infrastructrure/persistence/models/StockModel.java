@@ -48,7 +48,9 @@ public class StockModel {
     }
 
     public void update(Stock stock) {
-        new ModelMapper().map(stock, this);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(stock, this);
     }
 
     public Stock toDomainObj() {

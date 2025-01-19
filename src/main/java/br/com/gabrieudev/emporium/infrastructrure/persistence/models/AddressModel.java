@@ -56,7 +56,9 @@ public class AddressModel {
     }
 
     public void update(Address address) {
-        new ModelMapper().map(address, this);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(address, this);
     }
 
     public Address toDomainObj() {

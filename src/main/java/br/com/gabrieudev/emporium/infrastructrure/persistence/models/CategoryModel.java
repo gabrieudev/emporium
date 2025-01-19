@@ -45,7 +45,9 @@ public class CategoryModel {
     }
 
     public void update(Category category) {
-        new ModelMapper().map(category, this);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(category, this);
     }
 
     public Category toDomainObj() {

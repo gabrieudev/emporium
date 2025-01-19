@@ -51,7 +51,9 @@ public class UserModel {
     }
 
     public void update(User user) {
-        new ModelMapper().map(user, this);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(user, this);
     }
 
     public static UserModel fromDomainObj(User user) {

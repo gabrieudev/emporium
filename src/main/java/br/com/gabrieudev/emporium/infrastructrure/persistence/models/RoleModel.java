@@ -38,7 +38,9 @@ public class RoleModel {
     }
 
     public void update(Role role) {
-        new ModelMapper().map(role, this);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(role, this);
     }
 
     public static RoleModel from(Role role) {

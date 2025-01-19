@@ -64,7 +64,9 @@ public class CouponModel {
     }
 
     public void update(Coupon coupon) {
-        new ModelMapper().map(coupon, this);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(coupon, this);
     }
 
     public Coupon toDomainObj() {

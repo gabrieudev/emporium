@@ -49,7 +49,9 @@ public class CartModel {
     }
 
     public void update(Cart cart) {
-        new ModelMapper().map(cart, this);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(cart, this);
     }
 
     public Cart toDomainObj() {

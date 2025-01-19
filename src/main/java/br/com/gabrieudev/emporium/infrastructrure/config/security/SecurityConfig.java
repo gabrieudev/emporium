@@ -36,7 +36,7 @@ public class SecurityConfig {
     public SecurityConfig(@Lazy TokenValidationFilter tokenValidationFilter) {
         this.tokenValidationFilter = tokenValidationFilter;
     }
-    
+
     @Value("${jwt.public.key:#{null}}")
     private String publicKeyEnv;
 
@@ -52,28 +52,29 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .addFilterAfter(tokenValidationFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
-            .cors(Customizer.withDefaults())
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(
-                        HttpMethod.POST,
-                        "/users/signup",
-                        "/auth/signin",
-                        "/auth/refresh-token",
-                        "/stripe/webhook")
-                .permitAll()
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui.html",
-                        "/swagger-ui/**",
-                        "/swagger-resources/**",
-                        "/webjars/**",
-                        "/index.html",
-                        "/register.html",
-                        "/confirm.html",
-                        "/home.html")
-                .permitAll()
-                .anyRequest().authenticated())
+                .addFilterAfter(tokenValidationFilter,
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/users/signup",
+                                "/auth/signin",
+                                "/auth/refresh-token",
+                                "/stripe/webhook")
+                        .permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/index.html",
+                                "/register.html",
+                                "/confirm.html",
+                                "/home.html")
+                        .permitAll()
+                        .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
@@ -87,7 +88,7 @@ public class SecurityConfig {
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyContent));
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             return (RSAPublicKey) keyFactory.generatePublic(keySpec);
-        } 
+        }
         return publicKeyPath;
     }
 

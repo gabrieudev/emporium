@@ -280,8 +280,8 @@ public class UserController {
     )
     @PutMapping
     public ResponseEntity<UserDTO> update(
-        @Valid 
-        @RequestBody 
+        @Valid
+        @RequestBody
         UpdateUserDTO updateUserDTO
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(UserDTO.from(userInteractor.update(updateUserDTO.toDomainObj())));
