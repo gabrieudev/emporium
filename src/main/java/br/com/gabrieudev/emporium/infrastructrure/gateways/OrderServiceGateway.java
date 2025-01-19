@@ -180,7 +180,7 @@ public class OrderServiceGateway implements OrderGateway {
 
         SessionCreateParams sessionCreateParams = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:8080/api/v1/swagger-ui/index.html")
+                .setSuccessUrl("https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/")
                 .setShippingAddressCollection(SessionCreateParams.ShippingAddressCollection.builder()
                         .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.BR)
                         .build())
