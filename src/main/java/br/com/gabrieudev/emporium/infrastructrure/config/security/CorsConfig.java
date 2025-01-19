@@ -18,7 +18,7 @@ public class CorsConfig {
         
         config.setAllowCredentials(true);
         
-        config.setAllowedOriginPatterns(Arrays.asList("*"));
+        config.setAllowedOriginPatterns(Arrays.asList("https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/"));
 
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         
