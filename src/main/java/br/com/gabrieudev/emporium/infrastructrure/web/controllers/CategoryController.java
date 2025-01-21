@@ -68,7 +68,9 @@ public class CategoryController {
                 responseCode = "406",
                 description = "Erro de validação no corpo da requisição",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
@@ -116,14 +118,18 @@ public class CategoryController {
                 responseCode = "404",
                 description = "Categoria não encontrada",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
                 responseCode = "406",
                 description = "Erro de validação no corpo da requisição",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
@@ -171,14 +177,18 @@ public class CategoryController {
                 responseCode = "404",
                 description = "Categoria não encontrada",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
                 responseCode = "409",
                 description = "Categoria possui produtos cadastrados",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
@@ -282,7 +292,9 @@ public class CategoryController {
                 responseCode = "404",
                 description = "Categoria não encontrada",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(

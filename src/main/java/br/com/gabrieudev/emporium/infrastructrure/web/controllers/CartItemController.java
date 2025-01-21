@@ -46,8 +46,8 @@ public class CartItemController {
 
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     @Operation(
-        summary = "Criar item de pedido",
-        description = "Cria um item de pedido de acordo com o corpo da requisição",
+        summary = "Criar item de carrinho",
+        description = "Cria um item de carrinho de acordo com o corpo da requisição",
         tags = "CartItems",
         security = @SecurityRequirement(name = "BearerAuth")
     )
@@ -55,7 +55,7 @@ public class CartItemController {
         value = {
             @ApiResponse(
                 responseCode = "201",
-                description = "Item de pedido criado"
+                description = "Item de carrinho criado"
             ),
             @ApiResponse(
                 responseCode = "401",
@@ -67,6 +67,16 @@ public class CartItemController {
             @ApiResponse(
                 responseCode = "406",
                 description = "Informações inválidas",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
+                )
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "Estoque insuficiente",
                 content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(
@@ -97,8 +107,8 @@ public class CartItemController {
 
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     @Operation(
-        summary = "Atualizar item de pedido",
-        description = "Atualiza um item de pedido de acordo com o corpo da requisição",
+        summary = "Atualizar item de carrinho",
+        description = "Atualiza um item de carrinho de acordo com o corpo da requisição",
         tags = "CartItems",
         security = @SecurityRequirement(name = "BearerAuth")
     )
@@ -106,7 +116,7 @@ public class CartItemController {
         value = {
             @ApiResponse(
                 responseCode = "200",
-                description = "Item de pedido atualizado"
+                description = "Item de carrinho atualizado"
             ),
             @ApiResponse(
                 responseCode = "401",
@@ -117,7 +127,7 @@ public class CartItemController {
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "Item de pedido não encontrado",
+                description = "Item de carrinho não encontrado",
                 content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(
@@ -158,8 +168,8 @@ public class CartItemController {
 
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     @Operation(
-        summary = "Obter item de pedido",
-        description = "Obtém um item de pedido de acordo com o ID no parâmetro UUID",
+        summary = "Obter item de carrinho",
+        description = "Obtém um item de carrinho de acordo com o ID no parâmetro UUID",
         tags = "CartItems",
         security = @SecurityRequirement(name = "BearerAuth")
     )
@@ -167,7 +177,7 @@ public class CartItemController {
         value = {
             @ApiResponse(
                 responseCode = "200",
-                description = "Item de pedido obtido"
+                description = "Item de carrinho obtido"
             ),
             @ApiResponse(
                 responseCode = "401",
@@ -178,7 +188,7 @@ public class CartItemController {
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "Item de pedido não encontrado",
+                description = "Item de carrinho não encontrado",
                 content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(
@@ -201,7 +211,7 @@ public class CartItemController {
     @GetMapping("/{UUID}")
     public ResponseEntity<CartItemDTO> findById(
         @Parameter(
-            description = "Identificador do item de pedido",
+            description = "Identificador do item de carrinho",
             example = "7f4e4b24-1b0a-4a1a-9c1a-1b0a4a1a4a1a"
         )
         @PathVariable UUID UUID
@@ -212,7 +222,7 @@ public class CartItemController {
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     @Operation(
         summary = "Obter por pedido",
-        description = "Obtém itens de pedido de acordo com o ID do pedido no parâmetro orderId",
+        description = "Obtém itens de carrinho de acordo com o ID do carrinho no parâmetro cartId",
         tags = "CartItems",
         security = @SecurityRequirement(name = "BearerAuth")
     )
@@ -220,7 +230,7 @@ public class CartItemController {
         value = {
             @ApiResponse(
                 responseCode = "200",
-                description = "Itens de pedido obtidos"
+                description = "Itens de carrinho obtidos"
             ),
             @ApiResponse(
                 responseCode = "401",
@@ -231,7 +241,7 @@ public class CartItemController {
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "Pedido não encontrado",
+                description = "Carrinho não encontrado",
                 content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(
@@ -282,8 +292,8 @@ public class CartItemController {
 
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     @Operation(
-        summary = "Deletar item de pedido",
-        description = "Deleta um item de pedido de acordo com o ID no parâmetro UUID",
+        summary = "Deletar item de carrinho",
+        description = "Deleta um item de carrinho de acordo com o ID no parâmetro UUID",
         tags = "CartItems",
         security = @SecurityRequirement(name = "BearerAuth")
     )
@@ -291,7 +301,7 @@ public class CartItemController {
         value = {
             @ApiResponse(
                 responseCode = "204",
-                description = "Item de pedido deletado"
+                description = "Item de carrinho deletado"
             ),
             @ApiResponse(
                 responseCode = "401",
@@ -302,7 +312,7 @@ public class CartItemController {
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "Item de pedido nao encontrado",
+                description = "Item de carrinho não encontrado",
                 content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(
@@ -325,7 +335,7 @@ public class CartItemController {
     @DeleteMapping("/{UUID}")
     public ResponseEntity<Void> delete(
         @Parameter(
-            description = "Identificador do item de pedido",
+            description = "Identificador do item de carrinho",
             example = "7f4e4b24-1b0a-4a1a-9c1a-1b0a4a1a4a1a"
         )
         @PathVariable UUID UUID

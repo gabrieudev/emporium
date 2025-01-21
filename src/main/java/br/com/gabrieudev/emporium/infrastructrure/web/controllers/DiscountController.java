@@ -59,7 +59,9 @@ public class DiscountController {
                 responseCode = "406",
                 description = "Erro de validação no corpo da requisição",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(

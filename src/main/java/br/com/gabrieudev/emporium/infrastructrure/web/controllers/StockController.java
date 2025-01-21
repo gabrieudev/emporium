@@ -112,7 +112,9 @@ public class StockController {
                 responseCode = "404",
                 description = "Estoque não encontrado",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(

@@ -67,14 +67,18 @@ public class CouponController {
                 responseCode = "406",
                 description = "Erro de validação no corpo da requisição",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
                 responseCode = "409",
                 description = "Cupom com o mesmo código já cadastrado",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
@@ -122,7 +126,9 @@ public class CouponController {
                 responseCode = "404",
                 description = "Cupom não encontrado",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
@@ -175,7 +181,9 @@ public class CouponController {
                 responseCode = "404",
                 description = "Cupom não encontrado",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
@@ -247,14 +255,18 @@ public class CouponController {
                 responseCode = "406",
                 description = "Erro de validação no corpo da requisição",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
                 responseCode = "409",
                 description = "Cupom com o mesmo código já cadastrado",
                 content = @Content(
-                    schema = @Schema(implementation = Void.class)
+                    schema = @Schema(
+                        implementation = StandardException.class
+                    )
                 )
             ),
             @ApiResponse(
