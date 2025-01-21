@@ -81,7 +81,7 @@ STRIPE_KEY=<secret_key> STRIPE_WEBHOOK_SECRET<webhook_secret> PROFILE=dev docker
   "usageCount": 0,
   "stripeId": "wrS5mdCc",
   "createdAt": "2025-01-20T18:54:52.932574701",
-  "updatedAt": "2025-01-20T18:54:52.932639325",
+  "updatedAt": "2025-01-20T18:54:52.932639325"
 }
 ```
 
