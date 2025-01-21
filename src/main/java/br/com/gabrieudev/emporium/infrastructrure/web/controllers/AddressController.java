@@ -31,6 +31,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
@@ -47,7 +48,8 @@ public class AddressController {
     @Operation(
         summary = "Criar endereço",
         description = "Cria um endereço de acordo com o corpo da requisição",
-        tags = "Addresses"
+        tags = "Addresses",
+        security = @SecurityRequirement(name = "BearerAuth")
     )
     @ApiResponses(
         value = {
@@ -90,7 +92,8 @@ public class AddressController {
     @Operation(
         summary = "Atualizar endereço",
         description = "Atualiza um endereço de acordo com o corpo da requisição",
-        tags = "Addresses"
+        tags = "Addresses",
+        security = @SecurityRequirement(name = "BearerAuth")
     )
     @ApiResponses(
         value = {
@@ -143,7 +146,8 @@ public class AddressController {
     @Operation(
         summary = "Obter endereço",
         description = "Obtém um endereço de acordo com o parâmetro da requisição",
-        tags = "Addresses"
+        tags = "Addresses",
+        security = @SecurityRequirement(name = "BearerAuth")
     )
     @ApiResponses(
         value = {
@@ -184,7 +188,8 @@ public class AddressController {
     @Operation(
         summary = "Obter endereços",
         description = "Obtém endereços de acordo com o parâmetro da requisição",
-        tags = "Addresses"
+        tags = "Addresses",
+        security = @SecurityRequirement(name = "BearerAuth")
     )
     @ApiResponses(
         value = {
@@ -247,7 +252,8 @@ public class AddressController {
     @Operation(
         summary = "Deletar endereço",
         description = "Deleta um endereço de acordo com o parâmetro da requisição",
-        tags = "Addresses"
+        tags = "Addresses",
+        security = @SecurityRequirement(name = "BearerAuth")
     )
     @ApiResponses(
         value = {
