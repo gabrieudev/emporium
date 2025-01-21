@@ -14,7 +14,7 @@
 <p align="center">
  <a href="#documentacao">Acessar documentação</a> •
  <a href="#executar">Executar projeto</a> •
- <a href="#fluxo">Como usar</a> • 
+ <a href="#como-usar">Como usar</a> • 
  <a href="#contribuir">Contribuir</a>
 </p>
 
@@ -55,7 +55,7 @@ cd emporium
 STRIPE_KEY=<secret_key> STRIPE_WEBHOOK_SECRET<webhook_secret> PROFILE=dev docker compose up -d
 ```
 
-<h2>🔁 Como usar</h2>
+<h2 id="como-usar">🔁 Como usar</h2>
 
 1. Crie um usuário em `POST /users/signup`
 
