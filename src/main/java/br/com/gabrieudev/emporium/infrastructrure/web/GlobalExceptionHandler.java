@@ -16,7 +16,6 @@ import br.com.gabrieudev.emporium.application.exceptions.BadCredentialsException
 import br.com.gabrieudev.emporium.application.exceptions.BusinessRuleException;
 import br.com.gabrieudev.emporium.application.exceptions.EntityAlreadyExistsException;
 import br.com.gabrieudev.emporium.application.exceptions.EntityNotFoundException;
-import br.com.gabrieudev.emporium.application.exceptions.InvalidCouponException;
 import br.com.gabrieudev.emporium.application.exceptions.InvalidTokenException;
 import br.com.gabrieudev.emporium.application.exceptions.StandardException;
 import br.com.gabrieudev.emporium.application.exceptions.TransactionFailedException;
@@ -68,12 +67,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TransactionFailedException.class)
     public ResponseEntity<StandardException> handleTransactionFailedException(TransactionFailedException e) {
-        StandardException standardException = e.toStandardException();
-        return new ResponseEntity<>(standardException, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(InvalidCouponException.class)
-    public ResponseEntity<StandardException> handleInvalidCouponException(InvalidCouponException e) {
         StandardException standardException = e.toStandardException();
         return new ResponseEntity<>(standardException, HttpStatus.CONFLICT);
     }

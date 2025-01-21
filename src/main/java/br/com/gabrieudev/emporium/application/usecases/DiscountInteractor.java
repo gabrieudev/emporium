@@ -5,36 +5,40 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.gabrieudev.emporium.application.exceptions.InvalidCouponException;
+import br.com.gabrieudev.emporium.application.exceptions.BusinessRuleException;
+import br.com.gabrieudev.emporium.application.gateways.CartGateway;
 import br.com.gabrieudev.emporium.application.gateways.CouponGateway;
 import br.com.gabrieudev.emporium.application.gateways.DiscountGateway;
+import br.com.gabrieudev.emporium.domain.entities.Cart;
 import br.com.gabrieudev.emporium.domain.entities.Coupon;
 import br.com.gabrieudev.emporium.domain.entities.Discount;
 
 public class DiscountInteractor {
     private final DiscountGateway discountGateway;
     private final CouponGateway couponGateway;
+    private final CartGateway cartGateway;
 
-    public DiscountInteractor(DiscountGateway discountGateway, CouponGateway couponGateway) {
+    public DiscountInteractor(DiscountGateway discountGateway, CouponGateway couponGateway, CartGateway cartGateway) {
         this.discountGateway = discountGateway;
         this.couponGateway = couponGateway;
+        this.cartGateway = cartGateway;
     }
 
     public Discount create(Discount discount) {
-        Coupon coupon = discount.getCoupon();
+        Coupon coupon = couponGateway.findById(discount.getCoupon().getId());
 
-        BigDecimal total = discount.getOrder().getCart().getTotal();
+        Cart cart = cartGateway.findById(discount.getOrder().getCart().getId());
 
-        if (total.compareTo(coupon.getMinOrderValue()) < 0) {
-            throw new InvalidCouponException("Cupom não aplicável.");
+        if (cart.getTotal().subtract(coupon.getMinOrderValue()).compareTo(BigDecimal.ZERO) < 0) {
+            throw new BusinessRuleException("Cupom não aplicável.");
         }
 
         if (coupon.getValidUntil().isBefore(LocalDateTime.now())) {
-            throw new InvalidCouponException("Cupom expirado.");
+            throw new BusinessRuleException("Cupom expirado.");
         }
 
         if (coupon.getUsageCount() >= coupon.getUsageLimit()) {
-            throw new InvalidCouponException("Cupom esgotado.");
+            throw new BusinessRuleException("Cupom esgotado.");
         }
 
         coupon.setUsageCount(coupon.getUsageCount() + 1);
