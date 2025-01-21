@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.stripe.exception.StripeException;
 
 import br.com.gabrieudev.emporium.application.exceptions.BadCredentialsException;
+import br.com.gabrieudev.emporium.application.exceptions.BusinessRuleException;
 import br.com.gabrieudev.emporium.application.exceptions.EntityAlreadyExistsException;
 import br.com.gabrieudev.emporium.application.exceptions.EntityNotFoundException;
 import br.com.gabrieudev.emporium.application.exceptions.InvalidCouponException;
@@ -73,6 +74,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidCouponException.class)
     public ResponseEntity<StandardException> handleInvalidCouponException(InvalidCouponException e) {
+        StandardException standardException = e.toStandardException();
+        return new ResponseEntity<>(standardException, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<StandardException> handleBusinessRuleException(BusinessRuleException e) {
         StandardException standardException = e.toStandardException();
         return new ResponseEntity<>(standardException, HttpStatus.CONFLICT);
     }

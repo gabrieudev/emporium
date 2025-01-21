@@ -6,16 +6,20 @@ import java.util.UUID;
 
 import br.com.gabrieudev.emporium.application.gateways.CartGateway;
 import br.com.gabrieudev.emporium.application.gateways.CartItemGateway;
+import br.com.gabrieudev.emporium.application.gateways.StockGateway;
 import br.com.gabrieudev.emporium.domain.entities.Cart;
 import br.com.gabrieudev.emporium.domain.entities.CartItem;
+import br.com.gabrieudev.emporium.domain.entities.Stock;
 
 public class CartInteractor {
     private final CartGateway cartGateway;
     private final CartItemGateway cartItemGateway;
+    private final StockGateway stockGateway;
 
-    public CartInteractor(CartGateway cartGateway, CartItemGateway cartItemGateway) {
+    public CartInteractor(CartGateway cartGateway, CartItemGateway cartItemGateway, StockGateway stockGateway) {
         this.cartGateway = cartGateway;
         this.cartItemGateway = cartItemGateway;
+        this.stockGateway = stockGateway;
     }
 
     public Cart findByToken(String token) {
@@ -30,8 +34,14 @@ public class CartInteractor {
         List<CartItem> cartItems = cartItemGateway.findByCartId(cart.getId());
 
         cartItems.forEach(cartItem -> {
+            Stock stock = stockGateway.findByProductId(cartItem.getProduct().getId());
+
+            stock.setQuantity(stock.getQuantity() - cartItem.getQuantity());
+
             cartItem.setIsActive(Boolean.FALSE);
+
             cartItemGateway.update(cartItem);
+            stockGateway.update(stock);
         });
 
         cart.setTotal(BigDecimal.ZERO);

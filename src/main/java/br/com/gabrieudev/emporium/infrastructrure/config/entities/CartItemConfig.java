@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import br.com.gabrieudev.emporium.application.gateways.CartGateway;
 import br.com.gabrieudev.emporium.application.gateways.CartItemGateway;
+import br.com.gabrieudev.emporium.application.gateways.StockGateway;
 import br.com.gabrieudev.emporium.application.usecases.CartItemInteractor;
 import br.com.gabrieudev.emporium.infrastructrure.gateways.CartItemServiceGateway;
 import br.com.gabrieudev.emporium.infrastructrure.persistence.repositories.CartItemRepository;
@@ -13,8 +14,8 @@ import br.com.gabrieudev.emporium.infrastructrure.persistence.repositories.CartR
 @Configuration
 public class CartItemConfig {
     @Bean
-    CartItemInteractor cartItemInteractor(CartItemGateway cartItemGateway, CartGateway cartGateway) {
-        return new CartItemInteractor(cartItemGateway, cartGateway);
+    CartItemInteractor cartItemInteractor(CartItemGateway cartItemGateway, CartGateway cartGateway, StockGateway stockGateway) {
+        return new CartItemInteractor(cartItemGateway, cartGateway, stockGateway);
     }
 
     @Bean
