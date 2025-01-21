@@ -6,6 +6,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 
 import br.com.gabrieudev.emporium.application.gateways.CartGateway;
 import br.com.gabrieudev.emporium.application.gateways.CartItemGateway;
+import br.com.gabrieudev.emporium.application.gateways.StockGateway;
 import br.com.gabrieudev.emporium.application.usecases.CartInteractor;
 import br.com.gabrieudev.emporium.infrastructrure.gateways.CartServiceGateway;
 import br.com.gabrieudev.emporium.infrastructrure.persistence.repositories.CartItemRepository;
@@ -15,8 +16,8 @@ import br.com.gabrieudev.emporium.infrastructrure.persistence.repositories.UserR
 @Configuration
 public class CartConfig {
     @Bean
-    CartInteractor cartInteractor(CartGateway cartRepository, CartItemGateway cartItemGateway) {
-        return new CartInteractor(cartRepository, cartItemGateway);
+    CartInteractor cartInteractor(CartGateway cartRepository, CartItemGateway cartItemGateway, StockGateway stockGateway) {
+        return new CartInteractor(cartRepository, cartItemGateway, stockGateway);
     }
 
     @Bean
