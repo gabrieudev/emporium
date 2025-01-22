@@ -182,11 +182,20 @@ public class OrderServiceGateway implements OrderGateway {
             throw new TransactionFailedException("Nenhuma linha de item ou cupom foi encontrada.");
         }
 
-        if (discounts.isEmpty()) {
-            discounts = null;
-        }
+        SessionCreateParams sessionCreateParams = null;
 
-        SessionCreateParams sessionCreateParams = SessionCreateParams.builder()
+        if (discounts.isEmpty()) {
+            sessionCreateParams = SessionCreateParams.builder()
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl("https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/")
+                .setShippingAddressCollection(SessionCreateParams.ShippingAddressCollection.builder()
+                        .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.BR)
+                        .build())
+                .addAllLineItem(lineItems)
+                .putMetadata("orderId", order.getId().toString())
+                .build();
+        } else {
+            sessionCreateParams = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/")
                 .setShippingAddressCollection(SessionCreateParams.ShippingAddressCollection.builder()
@@ -196,6 +205,7 @@ public class OrderServiceGateway implements OrderGateway {
                 .addAllLineItem(lineItems)
                 .putMetadata("orderId", order.getId().toString())
                 .build();
+        }
 
         return Session.create(sessionCreateParams);
     }
