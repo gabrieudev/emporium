@@ -137,7 +137,7 @@ public class OrderServiceGateway implements OrderGateway {
 
     public Session createSession(Order order) throws StripeException {
         List<CartItemModel> cartItems = cartItemRepository.findByCartAndIsActiveTrue(CartModel.from(order.getCart()));
-
+    
         List<Coupon> stripeCoupons = discountRepository.findByOrderId(order.getId())
                 .stream()
                 .map(DiscountModel::toDomainObj)
@@ -150,64 +150,54 @@ public class OrderServiceGateway implements OrderGateway {
                     }
                 })
                 .toList();
-
-        List<SessionCreateParams.Discount> discounts = stripeCoupons.stream()
+    
+        SessionCreateParams.Discount discount = stripeCoupons.stream()
+                .findFirst() 
                 .map(coupon -> SessionCreateParams.Discount.builder()
                         .setCoupon(coupon.getId())
                         .build())
-                .collect(Collectors.toList());
-
+                .orElse(null); 
+    
         List<SessionCreateParams.LineItem> lineItems = cartItems.stream()
                 .map(item -> {
                     ProductModel productModel = productRepository.findById(item.getProduct().getId())
                             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
-
+    
                     Product stripeProduct;
                     try {
                         stripeProduct = Product.retrieve(productModel.getStripeId());
                     } catch (StripeException e) {
                         throw new TransactionFailedException("Erro ao buscar o produto no Stripe: " + e.getMessage());
                     }
-
+    
                     String priceId = stripeProduct.getDefaultPrice();
-
+    
                     return SessionCreateParams.LineItem.builder()
                             .setPrice(priceId)
                             .setQuantity((long) item.getQuantity())
                             .build();
                 })
                 .collect(Collectors.toList());
-
-        if (discounts.isEmpty() && lineItems.isEmpty()) {
-            throw new TransactionFailedException("Nenhuma linha de item ou cupom foi encontrada.");
+    
+        if (lineItems.isEmpty()) {
+            throw new TransactionFailedException("Nenhum item de carrinho foi encontrado.");
         }
-
-        SessionCreateParams sessionCreateParams = null;
-
-        if (discounts.isEmpty()) {
-            sessionCreateParams = SessionCreateParams.builder()
+    
+        SessionCreateParams.Builder sessionBuilder = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/")
                 .setShippingAddressCollection(SessionCreateParams.ShippingAddressCollection.builder()
                         .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.BR)
                         .build())
                 .addAllLineItem(lineItems)
-                .putMetadata("orderId", order.getId().toString())
-                .build();
-        } else {
-            sessionCreateParams = SessionCreateParams.builder()
-                .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/")
-                .setShippingAddressCollection(SessionCreateParams.ShippingAddressCollection.builder()
-                        .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.BR)
-                        .build())
-                .addAllDiscount(discounts)
-                .addAllLineItem(lineItems)
-                .putMetadata("orderId", order.getId().toString())
-                .build();
+                .putMetadata("orderId", order.getId().toString());
+    
+        if (discount != null) {
+            sessionBuilder.addDiscount(discount);
         }
-
-        return Session.create(sessionCreateParams);
+    
+        return Session.create(sessionBuilder.build());
     }
+    
 
 }
