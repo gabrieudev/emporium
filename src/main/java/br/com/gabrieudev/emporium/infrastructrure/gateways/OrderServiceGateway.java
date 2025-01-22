@@ -72,7 +72,7 @@ public class OrderServiceGateway implements OrderGateway {
         }
     }
 
-    @Override   
+    @Override
     @Transactional(readOnly = true)
     public List<Order> findAll(Integer page, Integer size) {
         return orderRepository.findAll(PageRequest.of(page, size))
@@ -156,7 +156,7 @@ public class OrderServiceGateway implements OrderGateway {
                         .setCoupon(coupon.getId())
                         .build())
                 .collect(Collectors.toList());
-        
+
         List<SessionCreateParams.LineItem> lineItems = cartItems.stream()
                 .map(item -> {
                     ProductModel productModel = productRepository.findById(item.getProduct().getId())
@@ -178,14 +178,22 @@ public class OrderServiceGateway implements OrderGateway {
                 })
                 .collect(Collectors.toList());
 
+        if (discounts.isEmpty() && lineItems.isEmpty()) {
+            throw new TransactionFailedException("Nenhuma linha de item ou cupom foi encontrada.");
+        }
+
+        if (discounts.isEmpty()) {
+            discounts = null;
+        }
+
         SessionCreateParams sessionCreateParams = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/")
                 .setShippingAddressCollection(SessionCreateParams.ShippingAddressCollection.builder()
                         .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.BR)
                         .build())
-                .addAllLineItem(lineItems)
                 .addAllDiscount(discounts)
+                .addAllLineItem(lineItems)
                 .putMetadata("orderId", order.getId().toString())
                 .build();
 
