@@ -193,13 +193,13 @@ public class UserController {
             name = "page",
             description = "Página atual da paginação"
         )
-        @RequestParam(required = false) Integer page,
+        @RequestParam(required = true) Integer page,
         
         @Parameter(
             name = "size",
             description = "Quantidade de itens por página"
         )
-        @RequestParam(required = false) Integer size,
+        @RequestParam(required = true) Integer size,
         
         @Parameter(
             name = "param",

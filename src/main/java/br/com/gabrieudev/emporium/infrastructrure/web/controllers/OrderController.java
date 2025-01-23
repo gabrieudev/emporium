@@ -175,19 +175,19 @@ public class OrderController {
             name = "page",
             description = "Página atual da paginação"
         )
-        @RequestParam(required = false) Integer page,
+        @RequestParam(required = true) Integer page,
         
         @Parameter(
             name = "size",
             description = "Quantidade de itens por página"
         )
-        @RequestParam(required = false) Integer size,
+        @RequestParam(required = true) Integer size,
 
         @Parameter(
             description = "Identificador do usuário",
             example = "7f4e4b24-1b0a-4a1a-9c1a-1b0a4a1a4a1a"
         )
-        @RequestParam(required = false) UUID userId
+        @RequestParam(required = true) UUID userId
     ) {
         List<OrderDTO> orders = orderInteractor.findByUserId(userId, page, size)
             .stream()

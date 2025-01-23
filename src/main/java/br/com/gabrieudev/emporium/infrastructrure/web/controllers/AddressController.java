@@ -179,6 +179,10 @@ public class AddressController {
     )
     @GetMapping("/{UUID}")
     public ResponseEntity<AddressDTO> getById(
+        @Parameter(
+            description = "Identificador do endereço",
+            example = "123e4567-e89b-12d3-a456-426614174000"
+        )
         @PathVariable UUID UUID
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(AddressDTO.from(addressInteractor.findById(UUID)));
@@ -225,19 +229,19 @@ public class AddressController {
             name = "page",
             description = "Página atual da paginação"
         )
-        @RequestParam(required = false) Integer page,
+        @RequestParam(required = true) Integer page,
         
         @Parameter(
             name = "size",
             description = "Quantidade de itens por página"
         )
-        @RequestParam(required = false) Integer size,
+        @RequestParam(required = true) Integer size,
         
         @Parameter(
             name = "userId",
             description = "Identificador do usuário"
         )
-        @RequestParam(required = false) UUID userId
+        @RequestParam(required = true) UUID userId
     ) {
         List<AddressDTO> addresses = addressInteractor.findByUserId(userId).stream()
                 .map(AddressDTO::from)
@@ -285,6 +289,10 @@ public class AddressController {
     )
     @DeleteMapping("/{UUID}")
     public ResponseEntity<Void> delete(
+        @Parameter(
+            description = "Identificador do endereço",
+            example = "123e4567-e89b-12d3-a456-426614174000"
+        )
         @PathVariable UUID UUID
     ) {
         addressInteractor.delete(UUID);
