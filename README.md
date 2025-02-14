@@ -1,8 +1,8 @@
 <h1 align="center" style="font-weight: bold;">Emporium 🛒</h1>
 
 <p align="center">
-  <a href="#inicio">In English</a> •
-  <a href="README.pt-br.md">Em português</a>
+  <a href="README.pt-br.md">Português (Brasil)</a> •
+  <a href="#start">English</a>
 </p>
 
 <p align="center">
@@ -17,21 +17,21 @@
 </p>
 
 <p align="center">
- <a href="#documentation">Access documentation</a> •
- <a href="#run">Run project</a> •
- <a href="#how-to-use">How to use</a> • 
+ <a href="#documentation">Access Documentation</a> •
+ <a href="#run">Run Project</a> •
+ <a href="#how-to-use">How to Use</a> • 
  <a href="#contribute">Contribute</a>
 </p>
 
 <p align="center">
-  <b>Emporium is a REST API for an E-commerce that uses Stripe as a payment gateway and allows creating resources such as products and discount coupons. Additionally, the project was developed following the principles of <a href=https://medium.com/@gabrielfernandeslemos/clean-architecture-uma-abordagem-baseada-em-princ%C3%ADpios-bf9866da1f9c>Clean Architecture</a> and with the best and most up-to-date practices to ensure the integrity of sensitive data.</b>
+  <b>Emporium is a REST API for an E-commerce platform using Stripe as a payment gateway and managing resources like products and discount coupons. The project follows the principles of <a href="https://medium.com/@gabrielfernandeslemos/clean-architecture-uma-abordagem-baseada-em-princ%C3%ADpios-bf9866da1f9c">Clean Architecture</a> and incorporates up-to-date industry best practices to ensure sensitive data integrity.</b>
 </p>
 
-<h2 id="documentation">📄 Access documentation</h2>
+<h2 id="documentation">📄 Access Documentation</h2>
 
-The project is hosted on a cloud service. Therefore, you can access its [documentation](https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/) developed through Swagger UI without the need to run it locally.
+The project is hosted on a cloud service. You can access its [documentation](https://emporium-production.up.railway.app/api/v1/swagger-ui/index.html#/), built with Swagger UI, without running it locally.
 
-<h2 id="run">⚙️ Run project</h2>
+<h2 id="run">⚙️ Run Project</h2>
 
 <h3>Prerequisites</h3>
 
@@ -47,34 +47,44 @@ git clone https://github.com/gabrieudev/emporium.git
 
 <h3>Environment Variables</h3>
 
-To run the application, you will need to set two environment variables related to the Stripe service: [Secret Key](https://dashboard.stripe.com/test/apikeys) and [Stripe Webhook Secret](https://docs.stripe.com/webhooks).
+Create a `.env` file with the following Stripe-related environment variables: [Secret Key](https://dashboard.stripe.com/test/apikeys) and [Stripe Webhook Secret](https://docs.stripe.com/webhooks):
 
-Note: The event type chosen for creating the Stripe webhook secret should be `checkout.session.completed`.
+```bash
+STRIPE_KEY=<secret_key>
+STRIPE_WEBHOOK_SECRET=<webhook_secret>
+```
 
-<h3>Starting</h3>
+> The Stripe webhook secret must be configured for the `checkout.session.completed` event type.
 
-Run the following commands, replacing the two variables:
+<h3>Initializing</h3>
+
+Run the following commands:
 
 ```bash
 cd emporium
-STRIPE_KEY=<secret_key> STRIPE_WEBHOOK_SECRET=<webhook_secret> PROFILE=dev docker compose up -d
+docker compose up -d --build
 ```
 
-<h2>🔁 How to use</h2>
+<h2 id="how-to-use">🔁 How to Use</h2>
 
-1. Create a user with `POST /users/signup`
+1. Create a user via `POST /users/signup` if running locally. Otherwise, use the admin credentials:
 
-2. Log in with `POST /auth/signin` and copy the `accessToken` value.
+```yaml
+email: "admin@gmail.com"
+password: "adminpassword"
+```
 
-3. Go to `Authorize` in the top field of the Swagger interface and enter the copied value. This way, all requests will automatically include the access token.
+2. Log in via `POST /auth/signin` and copy the `accessToken` value.
 
-4. Get your cart with `GET /carts`, search for a product with `GET /products`, and then create a new cart item with `POST /cart-items`.
+3. Click `Authorize` at the top of the Swagger UI and paste the token to authenticate all requests automatically.
 
-5. Get your cart again with `GET /carts`, now updated, and create a new order with `POST /orders`.
+4. Fetch your cart via `GET /carts`, search for products via `GET /products`, then add items to your cart via `POST /cart-items`.
 
-6. Optionally, you can add a discount coupon to your order. Just create a discount with `POST /discounts` using the following test coupon with a 10% discount:
+5. Fetch your updated cart via `GET /carts` and create an order via `POST /orders`.
 
-```bash
+6. Optionally, apply a discount coupon to your order. Create a test coupon with 10% off via `POST /discounts`:
+
+```json
 {
   "id": "d8ccd30a-8cca-4e09-bdfb-8729c117c033",
   "code": "ABC123",
@@ -90,33 +100,35 @@ STRIPE_KEY=<secret_key> STRIPE_WEBHOOK_SECRET=<webhook_secret> PROFILE=dev docke
 }
 ```
 
-If you didn't copy your order, you can retrieve it with `GET /orders` by inserting your user ID. If you don't know your user ID, you can get it with `GET /users/me`.
+> This coupon is valid for orders over 100 units until 01/20/2027.
 
-Note: The coupon will only be usable for orders with a minimum value of 100 and until 01/20/2027.
+> If logged in as admin, create your own coupon instead of using the test example.
 
-7. Obtain the payment link for your order with `GET /orders/{UUID}/payment-link` and access it.
+> Retrieve your order ID via `GET /orders` (use your user ID from `GET /users/me` if needed).
 
-8. Fill in the required personal fields (it is recommended to use fictitious information). For the payment method, enter the following test card:
+7. Get your payment link via `GET /orders/{UUID}/payment-link` and visit it.
+
+8. Fill in required personal details (use fictional data). For payment, use the test card:
 
 ```yaml
-Card number: 4242 4242 4242 4242
-Expiration date: 01/30
-Security code: 420
+Card Number: 4242 4242 4242 4242
+Expiration: 01/30
+CVC: 420
 ```
 
-Finally, you will be redirected back to the Swagger interface. Now, your cart will be empty, and your order will be updated with the information you entered during payment.
+After payment, you'll be redirected back. Your cart will be empty, and the order will reflect the payment details.
 
 <h2 id="contribute">📫 Contribute</h2>
 
-Contributions are very welcome! If you want to contribute, fork the repository and create a pull request.
+Contributions are welcome! Fork the repository and submit a pull request.
 
 1. `git clone https://github.com/gabrieudev/emporium.git`
 2. `git checkout -b feature/NAME`
-3. Follow the commit standards.
-4. Open a Pull Request explaining the issue solved or the functionality developed. If there are visual changes, attach screenshots of the modifications and wait for the review!
+3. Follow commit conventions.
+4. Open a Pull Request explaining changes. Include screenshots if applicable.
 
-<h3>Helpful documentation</h3>
+<h3>Helpful Documentation</h3>
 
-[📝 How to create a Pull Request](https://www.atlassian.com/br/git/tutorials/making-a-pull-request)
+[📝 How to Create a Pull Request](https://www.atlassian.com/git/tutorials/making-a-pull-request)
 
-[💾 Commit standard](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
+[💾 Commit Message Guidelines](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)

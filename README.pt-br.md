@@ -42,22 +42,32 @@ git clone https://github.com/gabrieudev/emporium.git
 
 <h3>Variáveis de Ambiente</h3>
 
-Para executar a aplicação, você precisará definir duas varáveis de ambiente relacionadas ao serviço do Stripe: [Chave Secreta](https://dashboard.stripe.com/test/apikeys) e o [Segredo de webhook Stripe](https://docs.stripe.com/webhooks).
+Para executar a aplicação, você precisará criar um arquivo `.env` contendo as variáveis de ambiente [Chave Secreta](https://dashboard.stripe.com/test/apikeys) e [Segredo de webhook Stripe](https://docs.stripe.com/webhooks) que estão relacionadas ao Stripe, que será utilizado como gateway de pagamentos:
 
-Observação: O tipo de evento escolhido para a criação do segredo de webhook Stripe deve ser o `checkout.session.completed`
+```bash
+STRIPE_KEY=<secret_key>
+STRIPE_WEBHOOK_SECRET<webhook_secret>
+```
+
+> O tipo de evento escolhido para a criação do segredo de webhook Stripe deve ser o `checkout.session.completed`
 
 <h3>Inicializando</h3>
 
-Execute os seguintes comandos inserindo as duas variáveis:
+Execute os seguintes comandos:
 
 ```bash
 cd emporium
-STRIPE_KEY=<secret_key> STRIPE_WEBHOOK_SECRET<webhook_secret> PROFILE=dev docker compose up -d
+docker compose up -d --build
 ```
 
 <h2 id="como-usar">🔁 Como usar</h2>
 
-1. Crie um usuário em `POST /users/signup`
+1. Crie um usuário em `POST /users/signup` caso não tenha executado o projeto localmente. Caso contrário, use as informações do usuário administrador:
+
+```yaml
+email: "admin@gmail.com"
+password: "adminpassword"
+```
 
 2. Faça login em `POST /auth/signin` e copie o valor de `accessToken`
 
@@ -85,9 +95,11 @@ STRIPE_KEY=<secret_key> STRIPE_WEBHOOK_SECRET<webhook_secret> PROFILE=dev docker
 }
 ```
 
-Caso não tenha copiado seu pedido, você poderá buscá-lo em `GET /orders` inserindo o ID do seu usuário. Caso não saiba o ID do seu usuário, você pode obtê-lo em `GET /users/me`
+> Este cupom somente será utilizável em pedidos com valor mínimo de 100 e até a data 20/01/2027
 
-Observação: O cupom somente será utilizável em pedidos com valor mínimo de 100 e até a data 20/01/2027
+> Se você fez login com as informações de usuário administrador, ao invés de usar o cupom acima, crie seu próprio cupom e utilize-o.
+
+> Caso não tenha copiado seu pedido, você poderá buscá-lo em `GET /orders` inserindo o ID do seu usuário. Caso não saiba o ID do seu usuário, você pode obtê-lo em `GET /users/me`
 
 7. Obtenha o link de pagamento do seu pedido em `GET /orders/{UUID}/payment-link` e acesse-o.
 
